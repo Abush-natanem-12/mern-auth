@@ -1,0 +1,62 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs/
+*.log
+yarn-error.log
+pnpm-debug.log
+lerna-debug.log
+npm-debug.log*
+debug.log
+
+# Build outputs
+dist/
+build/
+.out/
+.next/
+.vercel/
+.cache/
+.DS_Store
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+Thumbs.db
+*.bak
+*.tmp
+
+# TypeScript
+*.tsbuildinfo
+
+# Redux persist storage (if used)
+persist/
+
+# Prisma (if used)
+prisma/dev.db
+prisma/migrations/
+
+# Coverage reports
+coverage/
+
+# Storybook files
+.storybook/
+storybook-static/
+
+# Misc
+public/*.cache
+public/*.map
