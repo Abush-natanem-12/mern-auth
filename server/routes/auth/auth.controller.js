@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import userModel from "../../models/usersModel.js";
+import transporter from "../../config/nodemailer.js";
 
 export const register = async function (req, res) {
   const { name, email, password } = req.body;
@@ -29,6 +30,16 @@ export const register = async function (req, res) {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+
+    // NOTE: SENDING THE WELCOM EMAIL
+    const emailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Welcome to our website!",
+      text: `Hello ${name}, Thank you for registering with us. your account has been created with email id ${email}`,
+    };
+
+    await transporter.sendMail(emailOptions);
     res.json({ success: true });
   } catch (error) {
     res.json({
@@ -96,6 +107,76 @@ export const logout = async function (req, res) {
     return res.json({
       success: false,
       message: error.message || "Something went wrong",
+    });
+  }
+};
+
+export const sendOtpCode = async function (req, res) {
+  try {
+    const { userId } = req.body;
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    if (user.isAccountVerified) {
+      res.json({ success: false, message: "user Already verified" });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    user.verifyOtp = otp;
+    user.verifyOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
+
+    await user.save();
+
+    const emailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Welcome to our website!",
+      text: `Hello your OTP IS ${otp} verify your account with this otp number`,
+    };
+    await transporter.sendMail(emailOptions);
+
+    res.json({ success: true, message: "verification opt sent successfull" });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message || "Something went wrong",
+    });
+  }
+};
+
+export const verifyOtp = async function (req, res) {
+  const { userId, otp } = req.body;
+  if (!userId || !otp) {
+    return res.json({ success: false, message: "missing required fields" });
+  }
+
+  try {
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    if (user.verifyOtp == "" || user.verifyOtp !== otp) {
+      return res.json({ success: false, message: "Invalid Otp" });
+    }
+
+    if (user.verifyOtpExpireAt < Date.now()) {
+      return res.json({ success: false, message: "Otp code expired" });
+    }
+
+    user.isAccountVerified = true;
+    user.verifyOtp = "";
+    user.verifyOtpExpireAt = 0;
+    await user.save();
+
+    res.json({ success: true, message: "User verified successfully" });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message || "something went wrong",
     });
   }
 };
