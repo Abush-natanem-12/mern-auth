@@ -150,7 +150,7 @@ export const sendOtpCode = async function (req, res) {
 export const verifyOtp = async function (req, res) {
   const { userId, otp } = req.body;
   if (!userId || !otp) {
-    return res.json({ success: false, message: "missing required fields" });
+    return res.json({ success: false, message: "missing required details" });
   }
 
   try {
@@ -175,6 +175,97 @@ export const verifyOtp = async function (req, res) {
     res.json({ success: true, message: "User verified successfully" });
   } catch (error) {
     res.json({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
+};
+
+export const isAuthenticated = async function (req, res) {
+  try {
+  } catch (error) {
+    return res.json({ success: false, message: "user need to authenticate" });
+  }
+};
+
+// NOTE: SEND PASSWORD TO REST OTP
+export const resetOtp = async function () {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.json({ success: false, message: "email is required" });
+  }
+
+  try {
+    const user = userModel.findOne({ email });
+    if (!user) {
+      return res.json({
+        success: false,
+        message: error.message || "something went wrong",
+      });
+    }
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    user.resetOtp = otp;
+    user.resetOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
+
+    await user.save();
+
+    const emailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Password rest otp",
+      text: `To rest your password use this password ${resetOtp}`,
+    };
+    await transporter.sendMail(emailOptions);
+    return res.json({
+      success: true,
+      message: "otp reset code sent successfully",
+    });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message || "something went wrong",
+    });
+  }
+};
+
+//NOTE: RESET USER PASSWORD
+export const resetPassword = async function (req, res) {
+  const { email, otp, newpassword } = req.body;
+  if (!email || !otp || newpassword) {
+    return res.json({ success: false, message: "missing required fields" });
+  }
+
+  try {
+    const user = await userrModel.findOne({ email });
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "there is no user with this email address",
+      });
+    }
+
+    if (user.resetotp === "" || user.resetOtp !== otp) {
+      return res.json({ success: false, message: "invalid otp to reset" });
+    }
+
+    if (user.resetOtpExpireAt < Date.now()) {
+      return res.json({ success: false, message: "the otp period is expired" });
+    }
+
+    const hashedpassword = await bcrypt.hash(newpassword, 10);
+    user.password = hashedpassword;
+    user.resetOtp = "";
+    user.resetOtpExpireAt = 0;
+
+    await user.save();
+    return res.json({
+      success: true,
+      message: "password updated successfully",
+    });
+  } catch (error) {
+    return res.json({
       success: false,
       message: error.message || "something went wrong",
     });
