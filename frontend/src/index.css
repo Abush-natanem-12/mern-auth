@@ -1,0 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap");
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+@theme {
+  --font-logo: "Caveat", "sans-serif";
+}
