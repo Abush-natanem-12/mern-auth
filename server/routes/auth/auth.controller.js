@@ -190,6 +190,7 @@ export const isAuthenticated = async function (req, res) {
 
 // NOTE: SEND PASSWORD TO REST OTP
 export const resetOtp = async function () {
+  // email part
   const { email } = req.body;
 
   if (!email) {
