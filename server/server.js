@@ -6,6 +6,7 @@ import connectDB from "./config/mongodb.js";
 
 // HACK: IMPORTING ROUTES HERE
 import authRouter from "./routes/auth/auth.route.js";
+import userRouter from "./routes/user/user.route.js";
 
 // HACK: CREATING THE APP
 const app = express();
@@ -17,11 +18,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ credentials: true }));
 
-app.get("/", (req, res) => {
-  res.send("Hello world this is not the first time when I call you");
-});
-
+// NOTE: DEFINING ROUTES
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 
 app.listen(PORT, () => {
   connectDB();
