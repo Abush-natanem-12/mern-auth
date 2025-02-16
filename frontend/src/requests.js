@@ -25,3 +25,32 @@ export const createAccount = async function (userData) {
     }
   }
 };
+
+export const loginUser = async function (userData) {
+  try {
+    const response = await axios.post(`${API_URL}/api/auth/login`, userData);
+
+    if (response.status >= 200 && response.status < 300) {
+      if (response.data.success) {
+        console.log("user login successfully:", response.data);
+      } else {
+        throw new Error("Could not login ");
+      }
+    } else {
+      throw new Error("Could not register - HTTP status is not successful.");
+    }
+
+    return response;
+  } catch (error) {
+    if (error.response) {
+      console.error("Error creating account:", error.response.data);
+    } else {
+      console.error(
+        "Error creating account:",
+        error.message || "something wen wrong"
+      );
+    }
+  }
+};
+
+// export const isUserAuthenticated =
