@@ -77,7 +77,9 @@ export default function SignUp() {
 
       <button
         type="submit"
-        className="text-xl uppercase font-bold tracking-[1px] text-gray-400 bg-sky-700/[.4] pl-3 pr-10 py-2 rounded-xl hover:bg-sky-700/[.7] duration-300 cursor-pointer relative"
+        className={`text-xl uppercase font-bold tracking-[1px] text-gray-400 bg-sky-700/[.4] pl-3 ${
+          loading ? "pr-10" : "pr-3"
+        } py-2 rounded-xl hover:bg-sky-700/[.7] duration-300 cursor-pointer relative`}
       >
         Register
         {loading && (
