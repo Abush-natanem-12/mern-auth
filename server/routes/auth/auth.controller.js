@@ -183,13 +183,14 @@ export const verifyOtp = async function (req, res) {
 
 export const isAuthenticated = async function (req, res) {
   try {
+    return res.json({ success: true, message: "User is authenticated" });
   } catch (error) {
     return res.json({ success: false, message: "user need to authenticate" });
   }
 };
 
 // NOTE: SEND PASSWORD TO REST OTP
-export const resetOtp = async function () {
+export const resetOtp = async function (req, res) {
   // email part
   const { email } = req.body;
 
@@ -198,17 +199,17 @@ export const resetOtp = async function () {
   }
 
   try {
-    const user = userModel.findOne({ email });
+    const user = await userModel.findOne({ email });
     if (!user) {
       return res.json({
         success: false,
-        message: error.message || "something went wrong",
+        message: "user not found with this email address",
       });
     }
 
     const otp = Math.floor(100000 + Math.random() * 900000);
     user.resetOtp = otp;
-    user.resetOtpExpireAt = Date.now() + 24 * 60 * 60 * 1000;
+    user.resetOtpExpireAt = Date.now() + 15 * 60 * 1000;
 
     await user.save();
 
@@ -216,7 +217,7 @@ export const resetOtp = async function () {
       from: process.env.SENDER_EMAIL,
       to: user.email,
       subject: "Password rest otp",
-      text: `To rest your password use this password ${resetOtp}`,
+      text: `To reset your password use this password ${otp}`,
     };
     await transporter.sendMail(emailOptions);
     return res.json({
@@ -234,12 +235,12 @@ export const resetOtp = async function () {
 //NOTE: RESET USER PASSWORD
 export const resetPassword = async function (req, res) {
   const { email, otp, newpassword } = req.body;
-  if (!email || !otp || newpassword) {
+  if (!email || !otp || !newpassword) {
     return res.json({ success: false, message: "missing required fields" });
   }
 
   try {
-    const user = await userrModel.findOne({ email });
+    const user = await userModel.findOne({ email });
     if (!user) {
       return res.json({
         success: false,
@@ -248,7 +249,11 @@ export const resetPassword = async function (req, res) {
     }
 
     if (user.resetotp === "" || user.resetOtp !== otp) {
-      return res.json({ success: false, message: "invalid otp to reset" });
+      console.log(user.resetOtp, otp);
+      return res.json({
+        success: false,
+        message: "invalid otp to reset",
+      });
     }
 
     if (user.resetOtpExpireAt < Date.now()) {
