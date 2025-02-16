@@ -1,11 +1,10 @@
 import nodemailer from "nodemailer";
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: "smtp.gmail.com",
+  host: "smtp-relay.brevo.com",
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: process.env.SENDER_EMAIL,
+    user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
   },
 });
