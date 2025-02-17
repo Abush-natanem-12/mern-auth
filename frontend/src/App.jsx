@@ -4,6 +4,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Layout from "./pages/Layout";
 import AuthWrapper from "./pages/AuthWrapper";
+import VerifyAccountPage from "./pages/VerifyAccountPage";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
             element: <SignUp />,
           },
         ],
+      },
+      {
+        path: "/auth/verify-account",
+        element: <VerifyAccountPage />,
       },
     ],
   },
