@@ -33,7 +33,7 @@ export default function SignUp() {
       onSubmit={handleSubmit}
       className="w-full md:w-[80%] 2xl:w-[70%] mx-auto flex flex-col items-center gap-3 lg:gap-5 mb-5 lg:mb-7"
     >
-      <h2 className="text-2xl lg:text-3xl text-sky-700 tracking-[1px] font-bold">
+      <h2 className="text-2xl lg:text-3xl text-fuchsia-900 tracking-[1px] font-bold">
         Create An account
       </h2>
 
@@ -77,9 +77,9 @@ export default function SignUp() {
 
       <button
         type="submit"
-        className={`text-xl uppercase font-bold tracking-[1px] text-gray-400 bg-sky-700/[.4] pl-3 ${
+        className={`text-xl uppercase font-bold tracking-[1px] text-gray-400 bg-fuchsia-900/[.4] pl-3 ${
           loading ? "pr-10" : "pr-3"
-        } py-2 rounded-xl hover:bg-sky-700/[.7] duration-300 cursor-pointer relative`}
+        } py-2 rounded-xl hover:bg-fuchsia-900/[.7] duration-300 cursor-pointer relative`}
       >
         Register
         {loading && (
