@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function SignIn() {
   return (
     <form className="w-full md:w-[80%] 2xl:w-[70%] mx-auto flex flex-col items-center gap-3 lg:gap-5 mb-5 lg:mb-7">
@@ -27,12 +29,12 @@ export default function SignIn() {
         />
       </div>
 
-      <button
-        type="button"
+      <Link
+        to={"/auth/reset-password/enter-email"}
         className="text-sky-700 text-base tracking-[1px] self-start cursor-pointer"
       >
         Forgot password
-      </button>
+      </Link>
 
       <button
         type="submit"

@@ -5,6 +5,8 @@ import SignUp from "./pages/SignUp";
 import Layout from "./pages/Layout";
 import AuthWrapper from "./pages/AuthWrapper";
 import VerifyAccountPage from "./pages/VerifyAccountPage";
+import EnterEmailPage from "./pages/EnterEmailPage";
+import EnterNewPasswordPage from "./pages/EnterNewPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -15,15 +17,14 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/auth",
         element: <AuthWrapper />,
         children: [
           {
-            path: "sign-in",
+            path: "/auth/sign-in",
             element: <SignIn />,
           },
           {
-            path: "sign-up",
+            path: "/auth/sign-up",
             element: <SignUp />,
           },
         ],
@@ -31,6 +32,15 @@ const router = createBrowserRouter([
       {
         path: "/auth/verify-account",
         element: <VerifyAccountPage />,
+      },
+      {
+        path: "/auth/reset-password/enter-email",
+        element: <EnterEmailPage />,
+      },
+
+      {
+        path: "/auth/reset-password/new-password",
+        element: <EnterNewPasswordPage />,
       },
     ],
   },
