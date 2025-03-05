@@ -11,7 +11,11 @@ export const signupValidations = yup.object({
     .required("Please enter your email")
     .email("Please enter a valid email address")
     .min(3, "Email must be at least 3 characters"),
-  password: yup.string().required("Please enter your password"),
+  password: yup
+    .string()
+    .required("Please enter your password")
+    .min(6, "The passowrd must be atleast 6 characters")
+    .max(20, "the password must be at most 20 characters"),
   confirmPassword: yup
     .string()
     .required("Please confirm your password")
@@ -24,5 +28,9 @@ export const signInValidations = yup.object({
     .required("Please enter your email")
     .email("Please enter a valid email address")
     .min(3, "Email must be at least 3 characters"),
-  password: yup.string().required("Please enter your password"),
+  password: yup
+    .string()
+    .required("Please enter your password")
+    .min(6, "The passowrd must be atleast 6 characters")
+    .max(20, "the password must be at most 20 characters"),
 });
