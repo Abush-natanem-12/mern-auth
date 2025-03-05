@@ -1,78 +1,118 @@
 import { useState } from "react";
 import { createAccount } from "../requests";
+import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+import { signupValidations } from "../validations/inputValidations";
 
 export default function SignUp() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async function (e) {
-    e.preventDefault();
+  const { errors, values, touched, handleChange, handleBlur, handleSubmit } =
+    useFormik({
+      initialValues: {
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      },
+      onSubmit: async (values) => {
+        setLoading(true);
 
-    try {
-      setLoading(true);
-      const response = await createAccount({ name, email, password });
-
-      if (!response.data.success) {
-        return response.data.message || "something went wrong";
-      }
-      setLoading(false);
-      setEmail("");
-      setName("");
-      setPassword("");
-      return response.data.message || "account created successfully";
-    } catch (err) {
-      console.log(err);
-      return err.message || "something went wrong";
-    }
-  };
-
+        await createAccount(values);
+        setLoading(false);
+        navigate("/");
+      },
+      validationSchema: signupValidations,
+      enableReinitialize: true,
+    });
+  console.log(errors);
   return (
     <form
       onSubmit={handleSubmit}
       className="w-full md:w-[80%] 2xl:w-[70%] mx-auto flex flex-col items-center gap-3 lg:gap-5 mb-5 lg:mb-7"
     >
-      <h2 className="text-2xl lg:text-3xl text-fuchsia-900 tracking-[1px] font-bold">
+      <h2
+        className="text-2xl lg:text-3xl bg-clip-text bg-gradient-to-r from-fuchsia-950 to-sky-700
+       text-transparent tracking-[1px] font-bold"
+      >
         Create An account
       </h2>
 
-      <div className="w-full flex flex-col items-start md:flex-row  md:items-center gap-2 md:gap-0 justify-between mt-4">
+      <div className="w-full flex flex-col items-start  gap-2  mt-4">
         <label className="text-base font-bold text-gray-400">Full Name</label>
         <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={values["name"]}
+          onChange={handleChange}
+          onBlur={handleBlur}
           type="text"
-          name="fullName"
+          name="name"
           className="w-[80%] px-4 py-2 border border-sky-700/[.3] shadow-sm shadow-sky-700/[.4] focus:shadow-sky-700/[.8] duration-300 text-gray-300 rounded-md focus:outline-none outline-none"
           placeholder="John Doe"
         />
+
+        {touched["name"] && Boolean(errors["name"]) && (
+          <span className="text-sm text-red-500">{String(errors["name"])}</span>
+        )}
       </div>
 
-      <div className="w-full flex flex-col items-start md:flex-row  md:items-center gap-2 md:gap-0 justify-between mt-4">
+      <div className="w-full flex flex-col items-start  gap-2  mt-4">
         <label className="text-base font-bold text-gray-400">
           Email Address
         </label>
         <input
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={values["email"]}
+          onChange={handleChange}
+          onBlur={handleBlur}
           type="email"
           name="email"
           className="w-[80%] px-4 py-2 border border-sky-700/[.3] shadow-sm shadow-sky-700/[.4] focus:shadow-sky-700/[.8] duration-300 text-gray-300 rounded-md focus:outline-none outline-none"
           placeholder="you@example.com"
         />
+
+        {touched["email"] && Boolean(errors["email"]) && (
+          <span className="text-sm text-red-500">
+            {String(errors["email"])}
+          </span>
+        )}
       </div>
 
-      <div className="w-full flex flex-col items-start md:flex-row  md:items-center gap-2 md:gap-0 justify-between mt-4">
+      <div className="w-full flex flex-col items-start  gap-2  mt-4">
         <label className="text-base font-bold text-gray-400">Password</label>
         <input
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={values["password"]}
+          onChange={handleChange}
+          onBlur={handleBlur}
           type="password"
           name="password"
           className="w-[80%] px-4 py-2 border border-sky-700/[.3] shadow-sm shadow-sky-700/[.4] focus:shadow-sky-700/[.8] duration-300 text-gray-300 rounded-md focus:outline-none outline-none"
           placeholder="••••••••"
         />
+
+        {touched["password"] && Boolean(errors["password"]) && (
+          <span className="text-sm text-red-500">
+            {String(errors["password"])}
+          </span>
+        )}
+      </div>
+
+      <div className="w-full flex flex-col items-start  gap-2  mt-4">
+        <label className="text-base font-bold text-gray-400">Password</label>
+        <input
+          value={values["confirmPassword"]}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          type="password"
+          name="confirmPassword"
+          className="w-[80%] px-4 py-2 border border-sky-700/[.3] shadow-sm shadow-sky-700/[.4] focus:shadow-sky-700/[.8] duration-300 text-gray-300 rounded-md focus:outline-none outline-none"
+          placeholder="••••••••"
+        />
+
+        {touched["confirmPassword"] && Boolean(errors["confirmPassword"]) && (
+          <span className="text-sm text-red-500">
+            {String(errors["confirmPassword"])}
+          </span>
+        )}
       </div>
 
       <button
