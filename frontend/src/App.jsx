@@ -1,4 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+
+// NOTE: PAGES
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
@@ -7,6 +9,8 @@ import AuthWrapper from "./pages/AuthWrapper";
 import VerifyAccountPage from "./pages/VerifyAccountPage";
 import EnterEmailPage from "./pages/EnterEmailPage";
 import EnterNewPasswordPage from "./pages/EnterNewPasswordPage";
+
+import { AuthProvider } from "./features/context";
 
 const router = createBrowserRouter([
   {
@@ -47,5 +51,9 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router}></RouterProvider>;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router}></RouterProvider>;
+    </AuthProvider>
+  );
 }
