@@ -10,7 +10,7 @@ import VerifyAccountPage from "./pages/VerifyAccountPage";
 import EnterEmailPage from "./pages/EnterEmailPage";
 import EnterNewPasswordPage from "./pages/EnterNewPasswordPage";
 
-import { AuthProvider } from "./features/context";
+import { AuthProvider } from "./features/context.jsx";
 
 const router = createBrowserRouter([
   {
@@ -53,7 +53,7 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <AuthProvider>
-      <RouterProvider router={router}></RouterProvider>;
+      <RouterProvider router={router}></RouterProvider>
     </AuthProvider>
   );
 }

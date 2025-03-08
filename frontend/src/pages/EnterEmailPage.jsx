@@ -7,7 +7,10 @@ export default function EnterEmailPage() {
       onSubmit={handleSubmit}
       className="w-full md:w-[80%] 2xl:w-[70%] mx-auto flex flex-col items-center gap-3 lg:gap-5 mb-5 lg:mb-7 py-5"
     >
-      <h2 className="text-2xl lg:text-3xl text-fuchsia-900 text tracking-[1px] font-bold">
+      <h2
+        className="text-2xl lg:text-3xl bg-clip-text bg-gradient-to-r from-fuchsia-950 to-sky-700
+       text-transparent tracking-[1px] font-bold"
+      >
         Sign In
       </h2>
 
@@ -24,11 +27,11 @@ export default function EnterEmailPage() {
       </div>
 
       <div className="flex items-center gap-4">
-        <span className="text-base lg:text-xl font-bold tracking-[1px] text-gray-200">
+        <span className="text-base font-bold tracking-[1px] text-gray-200">
           Didnt get the code ?
         </span>
 
-        <button className="text-base lg:text-xl font-bold tracking-[1px] text-fuchsia-900">
+        <button className="text-base font-bold tracking-[1px] text-fuchsia-900">
           Send Again
         </button>
       </div>
@@ -37,7 +40,7 @@ export default function EnterEmailPage() {
         type="submit"
         className="text-base lg:text-xl  font-bold tracking-[1px] text-gray-400 bg-fuchsia-900/[.4] px-3 py-2 rounded-xl hover:bg-fuchsia-900/[.7] duration-300 cursor-pointer"
       >
-        Send Password reset code
+        Send code
       </button>
     </form>
   );

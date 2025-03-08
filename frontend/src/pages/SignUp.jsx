@@ -18,7 +18,6 @@ export default function SignUp() {
       },
       onSubmit: async (values) => {
         setLoading(true);
-
         await createAccount(values);
         setLoading(false);
         navigate("/");
